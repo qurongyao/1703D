@@ -5,8 +5,8 @@ public class HelloGit {
 
 		System.out.println("hello maven");
 
-		System.out.println("hello 1703DDDDDD");
-
+		System.out.println("hello 1703AAAA");
+		
 		
 	}
 	
