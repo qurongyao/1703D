@@ -1,0 +1,5 @@
+com\bwie\controller\UController.class
+com\bwie\service\IService.class
+com\bwie\service\ServiceImpl.class
+com\bwie\mapper\UserMapper.class
+com\bwie\bean\User.class

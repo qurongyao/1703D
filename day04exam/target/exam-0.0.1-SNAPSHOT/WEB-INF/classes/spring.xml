@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.3.xsd
+		http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+		<!-- 开启扫描 -->
+		<context:component-scan base-package="com.bwie">
+			<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		</context:component-scan>
+		
+		<!-- 引入db.properties -->
+		<context:property-placeholder location="classpath:db.properties"/>
+		<!-- 数据源 -->
+		<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+			<property value="${jdbc.url}" name="jdbcUrl"/>
+
+					<property value="${jdbc.driver}" name="driverClass"/>
+					
+					<property value="${jdbc.username}" name="user"/>
+					
+					<property value="${jdbc.password}" name="password"/>
+					
+					<property value="5" name="initialPoolSize"/>
+					
+					<property value="10" name="maxPoolSize"/>
+		</bean>
+
+		<!-- sqlSessionFactory -->
+		<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+			<!-- 引入数据源 -->
+			<property name="dataSource" ref="dataSource"></property>
+			<!-- 引入接口下的配置文件 -->
+			<property name="mapperLocations" value="classpath:com/bwie/mapper/*Mapper.xml"></property>
+			<!-- 省略包 -->
+			<property name="typeAliasesPackage" value="com.bwie.bean"></property>
+			<!-- 核心配置文件 -->
+			<property name="plugins">
+				<array>
+					<bean class="com.github.pagehelper.PageHelper">
+						<property name="properties">
+							<value>
+								dialect=mysql
+								reasonable=true
+							</value>
+						</property>
+					</bean>
+				</array>
+			</property>
+		</bean>
+		<!--Mapper  -->
+		<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+			<!-- 定位接口所在目录 -->
+			<property value="com.bwie.mapper" name="basePackage"></property>
+		</bean>
+		
+		<!-- 事务管理器 -->
+		<bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager" id="transactionManager">
+			<property name="dataSource" ref="dataSource"></property>
+		</bean>
+		<!-- 开启注解驱动 -->
+		<tx:annotation-driven transaction-manager="transactionManager"/>
+</beans>
