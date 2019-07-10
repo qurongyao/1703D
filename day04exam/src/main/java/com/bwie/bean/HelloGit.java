@@ -7,7 +7,7 @@ public class HelloGit {
 
 		System.out.println("hello 1703DDDDDD");
 
-		System.out.println("hello 1703D");
+		
 	}
 	
 	public void run(){
