@@ -2,7 +2,11 @@ package com.bwie.bean;
 
 public class HelloGit {
 	public void say(){
+
 		System.out.println("hello maven");
+
+		System.out.println("hello 1703DDDDDD");
+
 		System.out.println("hello 1703D");
 	}
 	
