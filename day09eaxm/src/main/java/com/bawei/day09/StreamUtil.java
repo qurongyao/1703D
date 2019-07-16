@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Scanner;
 
 public class StreamUtil {
 	//方法1：批量关闭流，参数能传无限个,例如传入FileInputStream对象、
